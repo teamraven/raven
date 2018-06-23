@@ -2,7 +2,18 @@
 
 
 //////////// Languages
-var langs =
+var langs = [
+ ['Bahasa Indonesia',['id-ID']],
+ ['Bahasa Melayu',   ['ms-MY']],
+ ['English',         ['en-US', 'United States']],
+ ['한국어',            ['ko-KR']],
+ ['中文',             ['cmn-Hans-CN', '普通话 (中国大陆)'],
+                     ['cmn-Hans-HK', '普通话 (香港)'],
+                     ['cmn-Hant-TW', '中文 (台灣)'],
+ ],
+];
+
+var langs2 =
 [['Afrikaans',       ['af-ZA']],
  ['Bahasa Indonesia',['id-ID']],
  ['Bahasa Melayu',   ['ms-MY']],
@@ -69,9 +80,9 @@ var langs =
 for (var i = 0; i < langs.length; i++) {
   select_language.options[i] = new Option(langs[i][0], i);
 }
-select_language.selectedIndex = 6;
+select_language.selectedIndex = 2;
 updateCountry();
-select_dialect.selectedIndex = 6;
+select_dialect.selectedIndex = 0;
 showInfo('info_start');
 
 function updateCountry() {
@@ -85,7 +96,6 @@ function updateCountry() {
   select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
 }
 
-var create_email = false;
 var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
@@ -95,16 +105,18 @@ if (!('webkitSpeechRecognition' in window)) {
 } else {
   start_button.style.display = 'inline-block';
   var recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
+  // recognition.continuous = true;
+  // recognition.interimResults = true;
 
   recognition.onstart = function() {
+    console.log('recognition.onstart');
     recognizing = true;
     showInfo('info_speak_now');
     start_img.src = '//google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
   };
 
   recognition.onerror = function(event) {
+    console.log('recognition.onerror');
     if (event.error == 'no-speech') {
       start_img.src = '//google.com/intl/en/chrome/assets/common/images/content/mic.gif';
       showInfo('info_no_speech');
@@ -126,7 +138,11 @@ if (!('webkitSpeechRecognition' in window)) {
   };
 
   recognition.onend = function() {
+    console.log('recognition.onend');
     recognizing = false;
+
+    recognition.start();
+
     if (ignore_onend) {
       return;
     }
@@ -142,13 +158,11 @@ if (!('webkitSpeechRecognition' in window)) {
       range.selectNode(document.getElementById('final_span'));
       window.getSelection().addRange(range);
     }
-    if (create_email) {
-      create_email = false;
-      createEmail();
-    }
+    
   };
 
   recognition.onresult = function(event) {
+    console.log('recognition.onresult');
     var interim_transcript = '';
     if (typeof(event.results) == 'undefined') {
       recognition.onend = null;
@@ -200,29 +214,6 @@ function createEmail() {
   var subject = encodeURI(final_transcript.substring(0, n));
   var body = encodeURI(final_transcript.substring(n + 1));
   window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
-}
-
-function copyButton() {
-  if (recognizing) {
-    recognizing = false;
-    recognition.stop();
-  }
-  copy_button.style.display = 'none';
-  copy_info.style.display = 'inline-block';
-  showInfo('');
-}
-
-function emailButton() {
-  if (recognizing) {
-    create_email = true;
-    recognizing = false;
-    recognition.stop();
-  } else {
-    createEmail();
-  }
-  email_button.style.display = 'none';
-  email_info.style.display = 'inline-block';
-  showInfo('');
 }
 
 function startButton(event) {
