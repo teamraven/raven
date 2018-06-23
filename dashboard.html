@@ -85,6 +85,16 @@ body {
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
 
+    <script  src="js/firebaseinit.js"></script>
+
+    <script>
+      // https://firebase.google.com/docs/database/web/read-and-write
+      var starCountRef = firebase.database().ref('responses/user1');
+      starCountRef.on('value', function(snapshot) {
+        // updateStarCount(postElement, snapshot.val());
+        console.log('starCountRef received', snapshot.val());
+      });
+    </script>
 </head>
 
 <body>

@@ -158,9 +158,13 @@ if (!('webkitSpeechRecognition' in window)) {
     }
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
+        console.log('final_transcript', event.results[i][0].transcript);
         final_transcript += event.results[i][0].transcript;
+        writeUserData(event.results[i][0].transcript);
       } else {
+        console.log('interim_transcript', event.results[i][0].transcript);
         interim_transcript += event.results[i][0].transcript;
+        writeUserData(event.results[i][0].transcript);
       }
     }
     final_transcript = capitalize(final_transcript);
