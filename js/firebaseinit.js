@@ -17,3 +17,11 @@
           text: text
         });
       }
+
+      function writeUserDataWithSentiment(userId, allData) {
+        var res = Object.assign({
+          timestamp: new Date(),
+          video: 'videoname',
+        }, allData);
+        firebase.database().ref('responses/' + userId).set(res);
+      }

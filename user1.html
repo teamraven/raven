@@ -96,7 +96,8 @@ body {
 
     <script  src="js/firebaseinit.js"></script>
     <script>
-      var writeUserData = writeUserDataGeneral.bind(this, 'user1');
+      var userId = 'user1';
+      var writeUserData = writeUserDataWithSentiment.bind(this, userId);
     </script>
 </head>
 
