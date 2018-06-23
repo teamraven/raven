@@ -174,90 +174,34 @@ if (!('webkitSpeechRecognition' in window)) {
       if (event.results[i].isFinal) {
         console.log('final_transcript', event.results[i][0].transcript);
         final_transcript += event.results[i][0].transcript;
-        var newData = {
-          "language": "en",
-          "sentences": [
-            {
-              "text": {
-                "content": event.results[i][0].transcript,
-                "beginOffset": 0
-              },
-              "sentiment": {
-                "magnitude": 0.8,
-                "score": 0.8
-              }
-            }
-          ],
-          "entities": [
-            {
-              "name": "Obama",
-              "type": "PERSON",
-              "metadata": {
-                "mid": "/m/02mjmr",
-                "wikipedia_url": "http://en.wikipedia.org/wiki/Barack_Obama"
-              },
-              "salience": 0.9143443,
-              "mentions": [
-                {
-                  "text": {
-                    "content": "Obama",
-                    "beginOffset": 10
-                  },
-                  "type": "PROPER"
-                },
-                {
-                  "text": {
-                    "content": "President",
-                    "beginOffset": 0
-                  },
-                  "type": "COMMON"
-                }
-              ]
-            },
-            {
-              "name": "White House",
-              "type": "LOCATION",
-              "metadata": {
-                "mid": "/m/081sq",
-                "wikipedia_url": "http://en.wikipedia.org/wiki/White_House"
-              },
-              "salience": 0.08565566,
-              "mentions": [
-                {
-                  "text": {
-                    "content": "White House",
-                    "beginOffset": 35
-                  },
-                  "type": "PROPER"
-                }
-              ]
-            }
-          ]
-        };
-        writeUserData(newData);
         
-        var http_bearer = 'Bearer: ya29.Gl3jBSBreOii6WD_crjBJDsj7KxdYuGqJdCnd7AKE-1QZ3TJZEQb42eCQ9ghFU2loJurHRssucDJkkFtOxpTQ_6tKgAAstRh6h7uDm4FhMcl1pyAJUEXvgzwmMMExCk';
-
         var http_data = {
           'encodingType': 'UTF8',
           'document': {
             'type': 'PLAIN_TEXT',
-            'content': 'Enjoy your vacation!'
+            'content': event.results[i][0].transcript
           }
         };
-        var http_url = "https://language.googleapis.com/v1/documents:analyzeSentiment";
+        var http_url_sentiment = "https://language.googleapis.com/v1/documents:analyzeSentiment?fields=documentSentiment%2Clanguage%2Csentences&key=AIzaSyCRFPNu6qMZY4sBou7ekFzecKfqBduHww0";
+        var http_url_entity = "https://language.googleapis.com/v1/documents:analyzeEntities?fields=entities%2Clanguage&key=AIzaSyCRFPNu6qMZY4sBou7ekFzecKfqBduHww0";
         $.ajax({
-          url: http_url,
-          headers: {
-            'Authorization': http_bearer,
-            // 'X_CSRF_TOKEN':'xxxxxxxxxxxxxxxxxxxx',
-            'Content-Type':'application/json'
-          },
-          method: 'POST',
+          type: 'POST',
+          url: http_url_sentiment,
+          data: JSON.stringify(http_data),
+          contentType: "application/json; charset=utf-8",
           dataType: 'json',
-          data: http_data,
-          success: function(data){
-            console.log('succes: '+data);
+          success: function(data_sentiment){
+            $.ajax({
+              type: 'POST',
+              url: http_url_entity,
+              data: JSON.stringify(http_data),
+              contentType: "application/json; charset=utf-8",
+              dataType: 'json',
+              success: function(data_entity){
+                var data = Object.assign({}, data_entity, data_sentiment);
+                writeUserData(data);
+              }
+            })
           }
         });
         
