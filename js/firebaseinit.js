@@ -10,18 +10,11 @@
       firebase.initializeApp(config);
 
       var database = firebase.database();
-      function writeUserDataGeneral(userId, text) {
-        firebase.database().ref('responses/' + userId).set({
-          timestamp: new Date(),
-          video: 'videoname',
-          text: text
-        });
-      }
-
       function writeUserDataWithSentiment(userId, allData) {
+        var timestamp = (new Date()).toString();
         var res = Object.assign({
-          timestamp: new Date(),
+          timestamp: timestamp,
           video: 'videoname',
         }, allData);
-        firebase.database().ref('responses/' + userId).set(res);
+        firebase.database().ref('responses/' + userId).push(res);
       }
