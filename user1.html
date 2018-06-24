@@ -17,7 +17,7 @@
 }
 
 body {
-  padding: 32px;
+  padding: 5px;
   font-family: sans-serif;
 }
 
@@ -99,6 +99,7 @@ body {
       var userId = 'user1';
       var writeUserData = writeUserDataWithSentiment.bind(this, userId);
     </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -107,9 +108,9 @@ body {
       <div class="compact marquee-stacked" id="marquee">
         <div class="marquee-copy">
           <h1>
-            <img width="600px" src="./images/raven.png">
+            <img width="300px" src="./images/raven.png">
           </h1>
-          <h2>User: Narmeet </h2>
+          <h2>User: David </h2>
         </div>
       </div>
       <div class="compact marquee">
@@ -146,7 +147,7 @@ body {
           </p>
         </div>
         <div id="div_start">
-          <button id="start_button" onclick="startButton(event)"><img alt="Start" id="start_img"
+          <button id="start_button" onclick="startButton(event)"><img alt="Start" id="start_img" width="100px"
           src="//google.com/intl/en/chrome/assets/common/images/content/mic.gif"></button>
         </div>
         <div id="results">
@@ -174,8 +175,8 @@ body {
           </div>
         </div>
         <div class="compact marquee" id="div_language">
-          <select id="select_language" onchange="updateCountry()">
-            </select>&nbsp;&nbsp; <select id="select_dialect">
+          <select id="select_language" style="font-size: 20px;"onchange="updateCountry()">
+            </select>&nbsp;&nbsp; <select id="select_dialect" style="font-size: 20px;">
             </select>
         </div>
       </div>
