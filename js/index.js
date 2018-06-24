@@ -105,8 +105,8 @@ if (!('webkitSpeechRecognition' in window)) {
 } else {
   start_button.style.display = 'inline-block';
   var recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
+  // recognition.continuous = true;
+  // recognition.interimResults = true;
 
   recognition.onstart = function() {
     console.log('recognition.onstart');
