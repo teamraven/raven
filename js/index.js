@@ -105,8 +105,8 @@ if (!('webkitSpeechRecognition' in window)) {
 } else {
   start_button.style.display = 'inline-block';
   var recognition = new webkitSpeechRecognition();
-  // recognition.continuous = true;
-  // recognition.interimResults = true;
+  recognition.continuous = true;
+  recognition.interimResults = true;
 
   recognition.onstart = function() {
     console.log('recognition.onstart');
@@ -171,10 +171,7 @@ if (!('webkitSpeechRecognition' in window)) {
       return;
     }
     for (var i = event.resultIndex; i < event.results.length; ++i) {
-      if (event.results[i].isFinal) {
-        console.log('final_transcript', event.results[i][0].transcript);
-        final_transcript += event.results[i][0].transcript;
-        
+
         var http_data = {
           'encodingType': 'UTF8',
           'document': {
@@ -204,11 +201,14 @@ if (!('webkitSpeechRecognition' in window)) {
             })
           }
         });
-        
+
+      if (event.results[i].isFinal) {
+        console.log('final_transcript', event.results[i][0].transcript);
+        final_transcript += event.results[i][0].transcript;
       } else {
         console.log('interim_transcript', event.results[i][0].transcript);
         interim_transcript += event.results[i][0].transcript;
-        writeUserData(event.results[i][0].transcript);
+
       }
     }
     final_transcript = capitalize(final_transcript);
